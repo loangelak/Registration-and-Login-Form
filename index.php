@@ -19,7 +19,7 @@
     		<div class='row'>
     			<div class='col-lg-4 offset-lg-4' id='alert'>
     				<div class='alert alert-success'>
-    					<strong id='result'>Hello World</strong>
+    					<strong id='result'></strong>
     				</div>
     			</div>
     		</div>
@@ -141,6 +141,53 @@
 					}
 				}); 
 				$('#forgot-form').validate();
+
+				//submit form w ajax - without page refresh
+				$('#register').click(function(e){
+					if(document.getElementById('register-form').checkValidity()){
+						e.preventDefault(); //prevents refresh
+						$.ajax({
+							url:'action.php',
+							method: 'post', 
+							data: $('#register-form').serialize()+'&action=register', //send all input data to action.php
+							success: function(response){
+								$('#alert').show();
+								$("#result").html(response);
+							}
+						});
+					}
+					return true; 
+				});
+				$('#login').click(function(e){
+					if(document.getElementById('login-form').checkValidity()){
+						e.preventDefault(); //prevents refresh
+						$.ajax({
+							url:'action.php',
+							method: 'post', 
+							data: $('#login-form').serialize()+'&action=login', //send all input data to action.php
+							success: function(response){
+								$('#alert').show();
+								$("#result").html(response);
+							}
+						});
+					}
+					return true; 
+				});
+				$('#forgot').click(function(e){
+					if(document.getElementById('forgot-form').checkValidity()){
+						e.preventDefault(); //prevents refresh
+						$.ajax({
+							url:'action.php',
+							method: 'post', 
+							data: $('#forgot-form').serialize()+'&action=forgot', //send all input data to action.php
+							success: function(response){
+								$('#alert').show();
+								$("#result").html(response);
+							}
+						});
+					}
+					return true; 
+				});
 			});
 		</script>
     </body>
