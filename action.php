@@ -42,6 +42,41 @@
 		}
 	}
 
+	//login 
+	if(isset($_POST['action']) && $_POST['action'] == 'login'){
+		session_start(); 
+
+		$username=$_POST['username'];
+		$password=sha1($_POST['password']);
+
+		$stmt_l=$conn->prepare("SELECT * FROM users WHERE username=? AND pass=?");
+		$stmt_l->bind_param("ss", $username, $password); 
+		$stmt_l->execute(); //execute stmt
+		$user=$stmt_l->fetch();
+
+		//check
+		if($user!=null){
+			$_SESSION['username']=$username; 
+			echo 'ok';
+
+			if(!empty($_POST['rem'])){
+				setcookie("username", $_POST['username'], time()+(10*365*24*60*60));
+				setcookie("password", $_POST['password'], time()+(10*365*24*60*60));
+			}
+			else{
+				if(isset($_COOKIE['username'])){
+					setcookie("username","");
+				}
+				if(isset($_COOKIE['password'])){
+					setcookie("password","");
+				}
+			}
+		}
+		else{
+			echo "Login Failed!  Check your username and password.";
+		}
+	}
+
 	function check_input($data){
 		$data=trim($data); //remove all white spaces
 		$data=stripslashes($data);
